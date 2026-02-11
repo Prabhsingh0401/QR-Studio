@@ -128,6 +128,10 @@ def generate_qr_code(url, output_format, theme=None):
 def index():
     return render_template('index.html')
 
+@app.route('/robots.txt')
+def robots():
+    return send_file('robots.txt', mimetype='text/plain')
+
 @app.route('/sitemap.xml')
 def sitemap():
     return send_file('sitemap.xml', mimetype='application/xml')
