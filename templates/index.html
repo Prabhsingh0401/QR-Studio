@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Studio | Free Custom QR Code Generator (PNG, SVG, Styled)</title>
+    <meta name="description" content="Generate high-quality, custom QR codes for free. Support for PNG, JPEG, and SVG formats. Create unique themed QR codes like Cyberpunk and Matrix styles instantly.">
+    <meta name="keywords" content="QR code generator, free QR code, custom QR code, SVG QR code, stylized QR code, QR studio, matrix qr code, cyberpunk qr code">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/qr-code.png">
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="QR Studio - Premium QR Code Generator">
+    <meta property="og:description" content="Generate beautiful, custom QR codes in seconds. Choose from multiple formats and unique artistic styles.">
+    <meta property="og:image" content="/static/og-image.png">
+
+    <link rel="canonical" href="https://your-domain.com/">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main-wrapper {
+            display: flex;
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        /* Layout Sections */
+        .config-section {
+            flex: 1.2;
+            padding: 40px;
+            border-right: 1px solid var(--border);
+        }
+
+        .preview-section {
+            flex: 1;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Custom Radio Buttons as Cards */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .option-card {
+            position: relative;
+        }
+
+        .option-card input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .option-card label {
+            display: block;
+            background: white;
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .option-card input:checked+label {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .theme-options {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f1f5f9;
+            border-radius: 12px;
+        }
+
+        .theme-options.show {
+            display: block;
+        }
+
+        #generateBtn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        #generateBtn:active {
+            transform: scale(0.98);
+        }
+
+        /* Preview Area */
+        .qr-placeholder {
+            width: 240px;
+            height: 240px;
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            background: white;
+        }
+
+        .qr-img {
+            max-width: 260px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            display: none;
+            background: white;
+            padding: 10px;
+        }
+
+        .download-area {
+            margin-top: 25px;
+            display: none;
+            width: 100%;
+        }
+
+        .download-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 80%;
+        }
+
+        .spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #eee;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-wrapper {
+                flex-direction: column;
+            }
+
+            .config-section {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="main-wrapper">
+        <section class="config-section">
+            <header>
+                <h1>QR Studio</h1>
+                <p class="subtitle">Professional QR Code Generator</p>
+            </header>
+
+            <form id="qrForm">
+                <div class="form-group">
+                    <label for="url">Endpoint URL</label>
+                    <input type="text" id="url" placeholder="https://example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>File Format</label>
+                    <div class="options-grid">
+                        <div class="option-card">
+                            <input type="radio" id="png" name="format" value="png" checked>
+                            <label for="png">PNG</label>
+                        </div>
+                        <div class="option-card">
+                            <input type="radio" id="jpeg" name="format" value="jpeg">
+                            <label for="jpeg">JPEG</label>
+                        </div>
+                        <div class="option-card">
+                            <input type="radio" id="svg" name="format" value="svg">
+                            <label for="svg">SVG</label>
+                        </div>
+                        <div class="option-card">
+                            <input type="radio" id="styled" name="format" value="styled">
+                            <label for="styled">Styled</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theme-options" id="themeOptions">
+                    <label>Theme Style</label>
+                    <div class="options-grid">
+                        <div class="option-card">
+                            <input type="radio" id="cyberpunk" name="theme" value="cyberpunk" checked>
+                            <label for="cyberpunk">Cyberpunk</label>
+                        </div>
+                        <div class="option-card">
+                            <input type="radio" id="terminal" name="theme" value="terminal">
+                            <label for="terminal">Terminal</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="generateBtn">Generate QR Code</button>
+            </form>
+
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                <h2 style="font-size: 1rem; color: var(--text-main); margin-bottom: 10px;">The Ultimate QR Code Toolkit</h2>
+                <p style="margin-bottom: 15px;">Create high-quality, professional QR codes for your business, social media, or personal use. QR Studio offers the best selection of formats and styles.</p>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li style="margin-bottom: 5px;">✅ <strong>Custom Styles:</strong> Exclusive themed designs.</li>
+                    <li>✅ <strong>Multiple Formats:</strong> PNG, JPEG, and Vector SVG.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="preview-section">
+            <div id="placeholder" class="qr-placeholder">Preview Area</div>
+            <div class="spinner" id="loading"></div>
+            <img id="qrImage" class="qr-img" alt="Generated QR Code Preview">
+
+            <div class="download-area" id="downloadArea">
+                <p id="fileName"
+                    style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 12px; font-family: monospace;"></p>
+                <button type="button" class="download-btn" id="downloadBtn">Download Now</button>
+            </div>
+        </section>
+    </main>
+
+    <footer style="margin-top: 30px; padding-bottom: 20px; color: var(--text-muted); font-size: 0.85rem; text-align: center; width: 100%;">
+        <p>QR Studio | Optimized for speed and design.</p>
+        <p>Made with ❤️ by Prableen Singh</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('qrForm');
+        const themeOptions = document.getElementById('themeOptions');
+        const qrImage = document.getElementById('qrImage');
+        const placeholder = document.getElementById('placeholder');
+        const loading = document.getElementById('loading');
+        const downloadArea = document.getElementById('downloadArea');
+        const fileNameDisp = document.getElementById('fileName');
+        const generateBtn = document.getElementById('generateBtn');
+
+        let currentData = null;
+
+        // Toggle Theme View
+        document.querySelectorAll('input[name="format"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                themeOptions.classList.toggle('show', e.target.value === 'styled');
+            });
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const url = document.getElementById('url').value.trim();
+            const format = document.querySelector('input[name="format"]:checked').value;
+            const theme = format === 'styled' ? document.querySelector('input[name="theme"]:checked').value : null;
+
+            // UI Feedback
+            placeholder.style.display = 'none';
+            qrImage.style.display = 'none';
+            downloadArea.style.display = 'none';
+            loading.style.display = 'block';
+            generateBtn.disabled = true;
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, format, theme })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentData = { url, format, theme };
+                    qrImage.src = data.image;
+                    qrImage.style.display = 'block';
+                    fileNameDisp.textContent = data.filename;
+                    downloadArea.style.display = 'block';
+                }
+            } catch (err) {
+                alert("Server error. Is the Flask app running?");
+                placeholder.style.display = 'flex';
+            } finally {
+                loading.style.display = 'none';
+                generateBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', async () => {
+            if (!currentData) return;
+            try {
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentData)
+                });
+                const blob = await response.blob();
+                const dlUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = dlUrl;
+                a.download = fileNameDisp.textContent;
+                a.click();
+            } catch (err) {
+                alert("Download failed.");
+            }
+        });
+    </script>
+</body>
+
+</html>
